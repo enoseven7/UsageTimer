@@ -10,6 +10,7 @@ namespace UsageTimer
         private DateTime startTime;
         private double totalSeconds = 0;
         private string saveFile = "time_log.txt";
+        private bool reallyExit;
         public Form1()
         {
             InitializeComponent();
@@ -42,7 +43,12 @@ namespace UsageTimer
                 this.WindowState = FormWindowState.Normal;
                 notifyIcon1.Visible = false;
             });
-            trayMenu.Items.Add("Exit", null, (s, e) => Application.Exit());
+            trayMenu.Items.Add("Exit", null, (s, ev) =>
+            {
+                reallyExit = true;          // allow the app to actually close
+                notifyIcon1.Visible = false;
+                Application.Exit();
+            });
 
             notifyIcon1.ContextMenuStrip = trayMenu;
         }
@@ -102,7 +108,20 @@ namespace UsageTimer
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             File.WriteAllText("window_pos.txt", $"{this.Left},{this.Top}");
-            base.OnFormClosing(e);
+            if (!reallyExit)
+            {
+                e.Cancel = true; // cancel default close
+                this.Hide();     // hide the window
+                notifyIcon1.Visible = true;
+            }
+
+        }
+
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+            notifyIcon1.Visible = false;
         }
 
         protected override void OnLoad(EventArgs e)

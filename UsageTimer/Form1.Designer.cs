@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             labelTime = new Label();
             timer1 = new System.Windows.Forms.Timer(components);
             notifyIcon1 = new NotifyIcon(components);
@@ -40,6 +41,7 @@
             linkLabel1 = new LinkLabel();
             progressBar2 = new ProgressBar();
             label4 = new Label();
+            label5 = new Label();
             SuspendLayout();
             // 
             // labelTime
@@ -62,7 +64,9 @@
             // 
             // notifyIcon1
             // 
+            notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
             notifyIcon1.Text = "PC Usage Tracker\r\n";
+            notifyIcon1.Visible = true;
             // 
             // label1
             // 
@@ -154,12 +158,24 @@
             label4.TabIndex = 8;
             label4.Text = "Hourly Progress Bar";
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Creato Display Light", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label5.ForeColor = Color.White;
+            label5.Location = new Point(524, 9);
+            label5.Name = "label5";
+            label5.Size = new Size(264, 14);
+            label5.TabIndex = 9;
+            label5.Text = "(Minizing or closing the app will move it to the tray.)";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(30, 30, 30);
             ClientSize = new Size(800, 450);
+            Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(progressBar2);
             Controls.Add(linkLabel1);
@@ -169,6 +185,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(labelTime);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
@@ -189,5 +206,6 @@
         private LinkLabel linkLabel1;
         private ProgressBar progressBar2;
         private Label label4;
+        private Label label5;
     }
 }
