@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using System.Text.Json;
 
 namespace UsageTimer
 {
@@ -11,6 +12,9 @@ namespace UsageTimer
         private double totalSeconds = 0;
         private string saveFile = "time_log.txt";
         private bool reallyExit;
+
+        private string statsFile = Path.Combine(Application.UserAppDataPath, "usage.json");
+        private Dictionary<string, double> dailyUsage = new();
         public Form1()
         {
             InitializeComponent();
@@ -49,8 +53,15 @@ namespace UsageTimer
                 notifyIcon1.Visible = false;
                 Application.Exit();
             });
+            trayMenu.Items.Add("View Statistics", null, (s, e) =>
+            {
+                StatsForm statsForm = new StatsForm();
+                statsForm.Show();
+            });
 
             notifyIcon1.ContextMenuStrip = trayMenu;
+
+            LoadUsage();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -115,6 +126,9 @@ namespace UsageTimer
                 notifyIcon1.Visible = true;
             }
 
+            SaveUsage();
+            base.OnFormClosing(e);
+
         }
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
@@ -170,6 +184,32 @@ namespace UsageTimer
         private void Form1_Load(object sender, EventArgs e)
         {
             SetAutoStart();
+        }
+
+        private void UpdateUsage(object sender, EventArgs e)
+        {
+            string today = DateTime.Now.ToString("yyyy--MM-dd");
+            if(!dailyUsage.ContainsKey(today))
+            {
+                dailyUsage[today] = 0;
+            }
+
+            dailyUsage[today] += 1;
+            SaveUsage();
+        }
+
+        private void SaveUsage()
+        {
+            File.WriteAllText(statsFile, JsonSerializer.Serialize(dailyUsage, new JsonSerializerOptions {  WriteIndented = true }));
+        }
+
+        private void LoadUsage()
+        {
+            if (File.Exists(statsFile))
+            {
+                string json = File.ReadAllText(statsFile);
+                dailyUsage = JsonSerializer.Deserialize<Dictionary<string, double>>(json) ?? new();
+            }
         }
     }
 }
