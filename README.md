@@ -1,4 +1,4 @@
-\# PC Usage Tracker
+# PC Usage Tracker
 
 
 
@@ -8,19 +8,19 @@ Simple lightweight Windows app to track total PC usage time.
 
 Features:
 
-\- Days, hours, minutes, seconds display
+- Days, hours, minutes, seconds display
 
-\- Reset button with confirmation
+- Reset button with confirmation
 
-\- Progress bar
+- Progress bar
 
-\- GitHub link
+- GitHub link
 
-\- Tray minimize support
+- Tray minimize support
 
 
 
-\# How to use:
+# How to use:
 
 
 
